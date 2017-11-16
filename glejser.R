@@ -1,4 +1,4 @@
-glejsertest <- function(model, regressor, power=c(1, 0.5, -0.5,-1)){
+glejsertest <- function(model, regressor, power=c(1, 0.5, -0.5,-1), intercept=TRUE){
   if (class(model) != "lm") stop("Not an object of class 'lm' ")
   
   # matrix for storing purposes
@@ -8,7 +8,11 @@ glejsertest <- function(model, regressor, power=c(1, 0.5, -0.5,-1)){
     # store information on which power used
     glejser.test[i,1] <- power[i]
     # estimate the auxillary regression
-    glejser.model <- lm(abs(resid(model)) ~ -1 + I(regressor^power[i]))
+    if(intercept==TRUE) {
+        glejser.model <- lm(abs(resid(model)) ~ I(regressor^power[i]))
+    } else {
+        glejser.model <- lm(abs(resid(model)) ~ -1 + I(regressor^power[i]))
+    }
     # Extract t-ratio
     glejser.test[i,2] <- coef(summary(glejser.model))[3]
     # Degrees of freedom 

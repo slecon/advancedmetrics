@@ -10,11 +10,13 @@ glejsertest <- function(model, regressor, power=c(1, 0.5, -0.5,-1), intercept=TR
     # estimate the auxillary regression
     if(intercept==TRUE) {
         glejser.model <- lm(abs(resid(model)) ~ I(regressor^power[i]))
+        # Extract t-ratio
+        glejser.test[i,2] <- coef(summary(glejser.model))[2,3]
     } else {
         glejser.model <- lm(abs(resid(model)) ~ -1 + I(regressor^power[i]))
+        # Extract t-ratio
+        glejser.test[i,2] <- coef(summary(glejser.model))[3]
     }
-    # Extract t-ratio
-    glejser.test[i,2] <- coef(summary(glejser.model))[2,3]
     # Degrees of freedom 
     glejser.test[i,3] <- df.residual(glejser.model)
     glejser.test[i,4] <- pt(glejser.test[i,2], glejser.test[i,3],lower.tail=FALSE)*2

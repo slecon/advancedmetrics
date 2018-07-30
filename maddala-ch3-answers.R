@@ -27,3 +27,7 @@ confint.sigma.sq.hat
 
 
 plot(q6, which=1)
+
+# Verify that residuals vanish, are orthogonal to X
+all.equal(sum(resid(q6)),0)
+all.equal(sum(resid(q6)*q6.data[,"x"]),0)
